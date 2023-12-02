@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model inventory {
+  barcode      String  @unique(map: "Inventory_barcode_key")
+  manufacturer String
+  type         String
+  volume       String
+  retail_price Float
+  on_sale      Boolean
+  sale_price   Float?
+  description  String?
+}
+
+model logos {
+  logoId   Int    @id @default(autoincrement())
+  imageUrl String
+}
