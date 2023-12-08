@@ -12,9 +12,8 @@ model inventory {
   manufacturer String
   type         String
   volume       String
-  retail_price Float
-  on_sale      Boolean
-  sale_price   Float?
+  price        String
+  location     String
   description  String?
 }
 

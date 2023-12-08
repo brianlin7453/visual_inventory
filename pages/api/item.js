@@ -1,16 +1,8 @@
 import { prisma } from "../../server/db/client";
 import _ from "lodash";
 export default async function handler(req, res) {
-  const {
-    barcode,
-    manufacturer,
-    volume,
-    type,
-    retail_price,
-    on_sale,
-    sale_price,
-    description,
-  } = req.body;
+  const { barcode, manufacturer, volume, type, price, location, description } =
+    req.body;
   const barcodeParam = req.query.barcode;
   switch (req.method) {
     case "GET":
@@ -29,21 +21,33 @@ export default async function handler(req, res) {
       }
       break;
     case "POST":
+      console.log("dawdwa");
       try {
-        const data = await prisma.inventory.create({
+        await prisma.inventory.create({
           data: {
             barcode: barcode,
             manufacturer: manufacturer,
             volume: volume,
             type: type,
-            retail_price: retail_price,
-            on_sale: on_sale,
-            sale_price: sale_price,
+            price: price,
+            location: location,
             description: description,
           },
         });
-        res.status(200).json({ Message: "Created new entry.", data: data });
+        res.status(200).json({
+          Message: "Created new entry.",
+          data: {
+            barcode: barcode,
+            manufacturer: manufacturer,
+            volume: volume,
+            type: type,
+            price: price,
+            location: location,
+            description: description,
+          },
+        });
       } catch (error) {
+        console.log(error);
         res.status(500).json(error);
       }
       break;

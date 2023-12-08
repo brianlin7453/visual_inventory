@@ -6,29 +6,46 @@ import {
   FormLabel,
   Input,
   Button,
+  Select,
 } from "@chakra-ui/react";
+import axios from "axios";
 function DataInputForm() {
   const [barcode, setBarcode] = useState("");
   const [manufacturer, setManufacturer] = useState("");
   const [type, setType] = useState("");
   const [volume, setVolume] = useState("");
-  const [retail_price, setRetailprice] = useState("");
-  const [on_sale, setOn_Sale] = useState("");
-  const [sale_price, setSale_Price] = useState("");
+  const [price, setPrice] = useState("");
+  const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const payload = {
+    const data = {
       barcode,
       manufacturer,
       type,
       volume,
-      retail_price,
-      on_sale,
-      sale_price,
+      price,
+      location,
       description,
     };
+    axios({
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://localhost:3000/api/item",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    }).then((response) => {
+      setBarcode("");
+      setManufacturer("");
+      setType("");
+      setVolume("");
+      setPrice("");
+      setLocation("");
+      setDescription("");
+    });
   };
 
   return (
@@ -40,7 +57,7 @@ function DataInputForm() {
             value={barcode}
             onChange={(event) => setBarcode(event.target.value)}
             className="mb-6 border-black"
-            placeholder="Serial Code"
+            placeholder="Barcode"
           />
           <Input
             value={manufacturer}
@@ -48,12 +65,15 @@ function DataInputForm() {
             className="mb-6 border-black"
             placeholder="Manufacturer"
           />
-          <Input
-            value={type}
-            onChange={(event) => setType(event.target.value)}
+          <Select
             className="mb-6 border-black"
             placeholder="Type"
-          />
+            onChange={(event) => setType(event.target.value)}
+          >
+            <option value="Wine">Wine</option>
+            <option value="Liquor">Liquor</option>
+            <option value="Other">Other</option>
+          </Select>
           <Input
             value={volume}
             onChange={(event) => setVolume(event.target.value)}
@@ -61,24 +81,16 @@ function DataInputForm() {
             placeholder="Volume"
           />
           <Input
-            value={retail_price}
-            onChange={(event) => setRetailprice(event.target.value)}
+            value={price}
+            onChange={(event) => setPrice(event.target.value)}
             className="mb-6 border-black"
-            placeholder="Retail Price"
+            placeholder="Price"
           />
-          <div className="flex">
-            <Checkbox
-              value={on_sale}
-              onChange={(event) => setOn_Sale(event.target.value)}
-              className="mb-6 border-black mt-1"
-            />
-            <span className="ml-2">On Sale?</span>
-          </div>
           <Input
-            value={sale_price}
-            onChange={(event) => setSale_Price(event.target.value)}
+            value={location}
+            onChange={(event) => setLocation(event.target.value)}
             className="mb-6 border-black"
-            placeholder="Sale Price"
+            placeholder="Location"
           />
           <Input
             value={description}
